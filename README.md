@@ -36,6 +36,13 @@
     - [Loops (until)](#loops-until)
     - [Loop Control: break and continue](#loop-control-break-and-continue)
   - [🔧 Functions](#-functions)
+    - [Basic Function Syntax](#basic-function-syntax)
+    - [Simple Functions](#simple-functions)
+    - [Functions with Parameters](#functions-with-parameters)
+    - [Return Values in Functions](#return-values-in-functions)
+    - [Local Variables in Functions](#local-variables-in-functions)
+    - [Function Overriding](#function-overriding)
+    - [Practical Function Examples](#practical-function-examples)
   - [📥 Argument Handling](#-argument-handling)
   - [📂 File Operations](#-file-operations)
   - [🚀 Practical Examples](#-practical-examples)
@@ -446,29 +453,165 @@ done
 
 ## 🔧 Functions
 
-Defining and calling functions in bash:
+Bash functions allow you to group commands for later execution using a single name.
+
+### Basic Function Syntax
+
+Functions in bash can be defined in two ways:
 
 ```bash
-# Simple function to add two numbers
-sum_function() {
-    local num1=$1
-    local num2=$2
-    sum=$((num1 + num2))
-    echo "The sum of $num1 and $num2 is: $sum"
+# Method 1: Using the 'function' keyword
+function function_name() {
+    commands
 }
 
-# Interactive function to calculate sum
-calculate_sum() {
-    echo "Enter first number:"
-    read num1
-    echo "Enter second number:"
-    read num2
-    sum_function $num1 $num2
+# Method 2: Without the 'function' keyword (more portable)
+function_name() {
+    commands
+}
+```
+
+### Simple Functions
+
+Basic functions without parameters:
+
+```bash
+# Simple function with no parameters
+simple_function() {
+    echo "This is a simple function"
+    echo "It doesn't take any parameters"
 }
 
-# Function to sum command line arguments
-sum_arguments() {
-    echo $(($1 + $2))
+# Call the function
+simple_function
+```
+
+### Functions with Parameters
+
+Functions can accept parameters, which are accessed using `$1`, `$2`, etc.:
+
+```bash
+# Function with a single parameter
+greet() {
+    echo "Hello, $1! How are you today?"
+}
+
+# Call the function with a parameter
+greet "Ammar"
+
+# Function with multiple parameters
+introduce() {
+    echo "Let me introduce $1, who is $2 years old and works as a $3"
+}
+
+# Call the function with multiple parameters
+introduce "Ammar" "30" "Developer"
+```
+
+### Return Values in Functions
+
+There are several ways to return values from functions:
+
+```bash
+# 1. Using the 'return' statement (can only return numeric exit status 0-255)
+check_number() {
+    if [ $1 -gt 10 ]; then
+        return 0  # Success (true in bash)
+    else
+        return 1  # Failure (false in bash)
+    fi
+}
+
+# Call the function and check its return value using $?
+check_number 15
+if [ $? -eq 0 ]; then
+    echo "The number is greater than 10"
+fi
+
+# 2. Using echo to return a value
+get_sum() {
+    local result=$(( $1 + $2 ))
+    echo $result
+}
+
+# Capture the output of the function
+sum=$(get_sum 10 20)
+echo "The sum is: $sum"
+
+# 3. Using a global variable
+calculate_product() {
+    PRODUCT=$(( $1 * $2 ))
+}
+
+# Call the function and use the global variable
+calculate_product 5 7
+echo "The product is: $PRODUCT"
+```
+
+### Local Variables in Functions
+
+The `local` keyword creates variables that are only accessible within the function:
+
+```bash
+demonstrate_local() {
+    local local_var="I am local"
+    global_var="I am global"
+    echo "Inside function: local_var = $local_var"
+    echo "Inside function: global_var = $global_var"
+}
+
+# Call the function and check variables
+demonstrate_local
+echo "Outside function: global_var = $global_var"  # This will show the value
+echo "Outside function: local_var = $local_var"    # This will be empty
+```
+
+### Function Overriding
+
+Functions can be redefined to change their behavior:
+
+```bash
+# Define a function
+my_function() {
+    echo "This is the original function"
+}
+
+# Call the original function
+my_function
+
+# Override the function
+my_function() {
+    echo "This is the overridden function"
+}
+
+# Call the overridden function
+my_function
+```
+
+### Practical Function Examples
+
+```bash
+# Function to check if a file exists
+check_file() {
+    if [ -f "$1" ]; then
+        echo "File $1 exists"
+        return 0
+    else
+        echo "File $1 does not exist"
+        return 1
+    fi
+}
+
+# Function to display system information
+system_info() {
+    echo "System Information:"
+    echo "-------------------"
+    echo "Hostname: $(hostname)"
+    echo "Kernel: $(uname -r)"
+    echo "Uptime: $(uptime -p)"
+    echo "CPU: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d ':' -f 2)"
+    echo "Memory: $(free -h | grep Mem | awk '{print $2}')"
+    echo "Disk Usage: $(df -h / | tail -1 | awk '{print $5}')"
 }
 ```
 
