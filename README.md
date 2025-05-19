@@ -30,6 +30,7 @@
     - [Additional String Operations](#additional-string-operations)
   - [🔄 Control Structures](#-control-structures)
     - [Conditional Statements (if)](#conditional-statements-if)
+    - [Case Statements](#case-statements)
     - [Loops (for)](#loops-for)
     - [Loops (while)](#loops-while)
     - [Loops (until)](#loops-until)
@@ -335,6 +336,41 @@ elif [ "$gender" == "F" ]; then
 else
     echo "Error: Invalid gender input"
 fi
+```
+
+### Case Statements
+
+Case statements provide a cleaner way to handle multiple conditions:
+
+```bash
+# Basic case statement
+echo "Do You Wanna Install it (y/n)"
+read choice
+
+case $choice in
+    y|Y) echo "Installing...";;
+    n|N) echo "Exiting...";;
+    *) echo "Invalid choice";;
+esac
+```
+
+You can also combine case statements with loops:
+
+```bash
+# Case statement with while loop
+while true
+do
+    echo "Do You Wanna Install it (y/n)"
+    read choice
+
+    case $choice in
+        y|Y) echo "Installing..."
+             break;;
+        n|N) echo "Exiting..."
+             break;;
+        *) echo "Invalid choice";;
+    esac
+done
 ```
 
 ### Loops (for)

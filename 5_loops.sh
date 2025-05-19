@@ -124,3 +124,33 @@ do
     fi
     echo "Odd number: $i"
 done
+
+# =====================================#
+# Loop Control: case statements
+# =====================================#
+
+echo -e "\n === Case Statement Examples ==="
+echo -e "Do You Wanna Install it (y/n)"
+read choice
+
+case $choice in 
+    y|Y) echo "Installing...";;
+    n|N) echo "Exiting...";;
+    *) echo "Invalid choice";;
+esac
+
+# example two using while loop
+
+while true
+do
+echo -e "Do You Wanna Install it (y/n)"
+read choice
+
+case $choice in 
+    y|Y) echo "Installing..."
+    break;;
+    n|N) echo "Exiting..."
+    break;;
+    *) echo "Invalid choice";;
+    esac
+done
